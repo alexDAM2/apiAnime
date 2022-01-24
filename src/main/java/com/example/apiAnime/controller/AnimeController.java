@@ -1,6 +1,7 @@
 package com.example.apiAnime.controller;
 
 import com.example.apiAnime.domain.dto.AnimeError;
+import com.example.apiAnime.domain.dto.RequestAnimeByName;
 import com.example.apiAnime.domain.dto.ResponseList;
 import com.example.apiAnime.domain.model.Anime;
 import com.example.apiAnime.domain.model.projection.AnimeProjection;
@@ -33,12 +34,8 @@ public class AnimeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAnime(@PathVariable UUID id){
-        Anime anime = animeRepository.findById(id).orElse(null);
-
-        if(anime==null) return //ResponseEntity.notFound().build();
-        ResponseEntity.status(HttpStatus.NOT_FOUND).body(AnimeError.message("No s'ha trobat l'anime amb l'id '" + id + "'"));
-        return ResponseEntity.ok().body(anime);
+    public Object getAnime(@PathVariable UUID id){
+        return ResponseEntity.ok().body(animeRepository.findByAnimeid(id, AnimeProjection.class));
     }
 
     @PostMapping("/")
@@ -59,12 +56,8 @@ public class AnimeController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(AnimeError.message("No s'ha trobat l'anime amb id '" + id + "'"));
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<?> getAnimeByName(@PathVariable String name){
-        List<Anime> anime = animeRepository.findByName(name);
-
-        if(anime==null) return //ResponseEntity.notFound().build();
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(AnimeError.message("No s'ha trobat l'anime amb el nom '" + name + "'"));
-        return ResponseEntity.ok().body(anime);
+    @GetMapping("/name")
+    public Object getAnimeByName(@RequestBody RequestAnimeByName requestAnimeByName) {
+        return ResponseEntity.ok().body(animeRepository.findByName(requestAnimeByName.name, AnimeProjection.class));
     }
 }
