@@ -44,3 +44,9 @@ CREATE TABLE IF NOT EXISTS favourite (
     animeid uuid REFERENCES anime(animeid) ON DELETE CASCADE,
     userid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
     PRIMARY KEY (animeid, userid));
+
+
+CREATE TABLE IF NOT EXISTS usertouser(
+     followerid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
+     followedid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
+       PRIMARY KEY (followerid, followedid));

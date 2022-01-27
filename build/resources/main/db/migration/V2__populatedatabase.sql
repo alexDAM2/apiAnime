@@ -35,7 +35,17 @@ INSERT INTO anime_genre VALUES
     ((SELECT animeid FROM anime WHERE name='GTO'),(SELECT genreid FROM genre WHERE label='Seinen'));
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-INSERT INTO animeuser (username, password) VALUES ('user', crypt('pass', gen_salt('bf')));
+INSERT INTO animeuser (username, password) VALUES
+('user', crypt('pass', gen_salt('bf'))),
+('user2', crypt('pass', gen_salt('bf'))),
+('user3', crypt('pass', gen_salt('bf')));
 
 INSERT INTO favourite VALUES
     ((SELECT animeid FROM anime WHERE name='Evangelion'),(SELECT userid FROM animeuser WHERE username = 'user'));
+
+INSERT INTO usertouser(followerid, followedid) VALUES
+((SELECT userid FROM animeuser WHERE username = 'user'), (SELECT userid FROM animeuser WHERE username = 'user2')),
+((SELECT userid FROM animeuser WHERE username = 'user'), (SELECT userid FROM animeuser WHERE username = 'user3')),
+((SELECT userid FROM animeuser WHERE username = 'user3'), (SELECT userid FROM animeuser WHERE username = 'user2'))
+
+;

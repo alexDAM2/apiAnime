@@ -3,7 +3,6 @@ package com.example.apiAnime.controller;
 import com.example.apiAnime.domain.dto.AnimeError;
 import com.example.apiAnime.domain.dto.RequestFavourite;
 import com.example.apiAnime.domain.dto.UserRegisterRequest;
-import com.example.apiAnime.domain.model.Anime;
 import com.example.apiAnime.domain.model.Favourite;
 import com.example.apiAnime.domain.model.User;
 import com.example.apiAnime.domain.model.projection.UserFavouritesProjection;
@@ -77,7 +76,7 @@ public class UserController {
                 "<input type='button' value='Register' onclick='fetch(\"/users/register/\",{method:\"POST\",headers:{\"Content-Type\":\"application/json\"},body:`{\"username\":\"${username.value}\",\"password\":\"${password.value}\"}`})'></div>";
     }
 
-    @GetMapping("/favourites")
+    @GetMapping("/favorites")
     public ResponseEntity<?> getFavourites(Authentication authentication) {
 
 
@@ -109,6 +108,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
     }
 
+    @GetMapping("/followers")
+    public ResponseEntity<?> getFollowers(Authentication authentication) {
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
+            if (authenticatedUser != null) {
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), UserProjection.class));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
+    }
+/*TODO
+    @PostMapping("/follow")
+    public ResponseEntity<?> addFollower*/
 
 }

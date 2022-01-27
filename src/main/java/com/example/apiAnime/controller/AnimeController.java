@@ -40,7 +40,7 @@ public class AnimeController {
 
     @PostMapping("/")
     public ResponseEntity<?> createAnime(@RequestBody Anime anime){
-        if (animeRepository.findByName(anime.getName()) != null) {
+        if (animeRepository.findByName(anime.name) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(AnimeError.message("Ja existeix un anime amb el nom '"+anime.name+"'"));
         }
         return ResponseEntity.ok().body(animeRepository.save(anime));

@@ -16,6 +16,5 @@ public class Genre {
     public String label;
 
     @ManyToMany(mappedBy = "genres")
-    //@JsonIgnoreProperties("genres")
     public Set<Anime> animes;
 }

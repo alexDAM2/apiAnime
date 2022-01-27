@@ -10,4 +10,7 @@ public interface UserProjection {
     UUID getUserid();
     String getUsername();
     String getPassword();
+
+    @JsonIgnoreProperties("followers")
+    Set<UserProjection> getFollowers();
 }

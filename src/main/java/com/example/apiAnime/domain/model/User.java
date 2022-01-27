@@ -22,4 +22,12 @@ public class User {
 
     @ManyToMany(mappedBy = "favoritedby")
     public Set<Anime> favorites;
+
+    @ManyToMany
+    @JoinTable(name = "usertouser", joinColumns = @JoinColumn(name ="followerid"), inverseJoinColumns = @JoinColumn(name = "followedid"))
+    public Set<User> followedby;
+
+    @ManyToMany(mappedBy = "followedby")
+    public Set<User> followers;
+
 }
