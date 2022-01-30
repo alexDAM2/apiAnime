@@ -2,13 +2,17 @@ package com.example.apiAnime.controller;
 
 import com.example.apiAnime.domain.dto.AnimeError;
 import com.example.apiAnime.domain.dto.RequestFavourite;
+import com.example.apiAnime.domain.dto.RequestFollow;
 import com.example.apiAnime.domain.dto.UserRegisterRequest;
 import com.example.apiAnime.domain.model.Favourite;
+import com.example.apiAnime.domain.model.Follow;
 import com.example.apiAnime.domain.model.User;
+import com.example.apiAnime.domain.model.projection.FollowProjection;
 import com.example.apiAnime.domain.model.projection.UserFavouritesProjection;
 import com.example.apiAnime.domain.model.projection.UserProjection;
 import com.example.apiAnime.repository.AnimeRepository;
 import com.example.apiAnime.repository.FavouriteRepository;
+import com.example.apiAnime.repository.FollowRepository;
 import com.example.apiAnime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,7 @@ public class UserController {
     @Autowired private UserRepository userRepository;
     @Autowired private AnimeRepository animeRepository;
     @Autowired private FavouriteRepository favouriteRepository;
+    @Autowired private FollowRepository followRepository;
 
     @Autowired private BCryptPasswordEncoder passwordEncoder;
 
@@ -114,13 +119,39 @@ public class UserController {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
             if (authenticatedUser != null) {
-                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), UserProjection.class));
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), FollowProjection.class));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
     }
-/*TODO
+
     @PostMapping("/follow")
-    public ResponseEntity<?> addFollower*/
+    public ResponseEntity<?> addFollower(@RequestBody RequestFollow requestFollow, Authentication authentication) {
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                Follow follow = new Follow();
+                follow.followeduserid = requestFollow.userid;
+                follow.followeruserid = authenticatedUser.userid;
+                followRepository.save(follow);
+                return  ResponseEntity.ok().build();
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
+    }
+
+    @GetMapping("/followed")
+    public ResponseEntity<?> getFollowed(Authentication authentication) {
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                return ResponseEntity.ok().body(followRepository.findByUsername(authentication.getName(), FollowProjection.class));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
+    }
 
 }
