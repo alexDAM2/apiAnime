@@ -7,7 +7,8 @@ import com.example.apiAnime.domain.dto.UserRegisterRequest;
 import com.example.apiAnime.domain.model.Favourite;
 import com.example.apiAnime.domain.model.Follow;
 import com.example.apiAnime.domain.model.User;
-import com.example.apiAnime.domain.model.projection.FollowProjection;
+import com.example.apiAnime.domain.model.projection.FollowedProjection;
+import com.example.apiAnime.domain.model.projection.FollowersProjection;
 import com.example.apiAnime.domain.model.projection.UserFavouritesProjection;
 import com.example.apiAnime.domain.model.projection.UserProjection;
 import com.example.apiAnime.repository.AnimeRepository;
@@ -119,7 +120,7 @@ public class UserController {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
             if (authenticatedUser != null) {
-                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), FollowProjection.class));
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), FollowersProjection.class));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
@@ -132,8 +133,8 @@ public class UserController {
 
             if (authenticatedUser != null) {
                 Follow follow = new Follow();
-                follow.followeduserid = requestFollow.userid;
-                follow.followeruserid = authenticatedUser.userid;
+                follow.followedid = requestFollow.userid;
+                follow.followerid = authenticatedUser.userid;
                 followRepository.save(follow);
                 return  ResponseEntity.ok().build();
             }
@@ -142,13 +143,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
     }
 
+    /*@GetMapping("/followed")
+    public ResponseEntity<?> getFollowed(Authentication authentication) {
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                return ResponseEntity.ok().body(followRepository.findByFollowedid(userRepository.findByUsername(authentication.getName()).userid, FollowersProjection.class));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));
+    }*/
+
     @GetMapping("/followed")
     public ResponseEntity<?> getFollowed(Authentication authentication) {
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
             if (authenticatedUser != null) {
-                return ResponseEntity.ok().body(followRepository.findByUsername(authentication.getName(), FollowProjection.class));
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), FollowedProjection.class));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AnimeError.message("No autorizado"));

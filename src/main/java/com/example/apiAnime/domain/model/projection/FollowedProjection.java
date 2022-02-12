@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Set;
 import java.util.UUID;
 
-public interface FollowProjection {
+public interface FollowedProjection {
     UUID getUserid();
     String getUsername();
 
-    @JsonIgnoreProperties("followers")
-    Set<UserProjection> getFollowers();
+    @JsonIgnoreProperties("followedby")
+    Set<UserProjection> getFollowedby();
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 @IdClass(FollowerFollowedKey.class)
 public class Follow {
     @Id
-    public UUID followeduserid;
+    public UUID followedid;
     @Id
-    public UUID followeruserid;
+    public UUID followerid;
 }
