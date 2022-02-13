@@ -25,9 +25,9 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "usertouser", joinColumns = @JoinColumn(name ="followerid"), inverseJoinColumns = @JoinColumn(name = "followedid"))
-    public Set<User> followedby;
+    public Set<User> following;
 
-    @ManyToMany(mappedBy = "followedby")
+    @ManyToMany(mappedBy = "following")
     public Set<User> followers;
 
 }
