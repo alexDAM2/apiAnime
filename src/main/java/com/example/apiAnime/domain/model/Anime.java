@@ -3,6 +3,7 @@ package com.example.apiAnime.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class Anime {
     public String type;
     public int year;
     public String imageurl;
+    public ArrayList<String> comments;
 
     @ManyToMany
     @JoinTable(name = "anime_author", joinColumns = @JoinColumn(name ="animeid"), inverseJoinColumns = @JoinColumn(name = "authorid"))

@@ -50,3 +50,9 @@ CREATE TABLE IF NOT EXISTS usertouser(
      followerid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
      followedid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
        PRIMARY KEY (followerid, followedid));
+
+CREATE TABLE IF NOT EXISTS comments (
+    userid uuid REFERENCES animeuser(userid) ON DELETE CASCADE,
+    animeid uuid REFERENCES anime(animeid) ON DELETE CASCADE,
+    comment text,
+    PRIMARY KEY (userid, animeid));
