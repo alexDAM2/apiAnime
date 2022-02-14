@@ -56,3 +56,5 @@ CREATE TABLE IF NOT EXISTS comments (
     animeid uuid REFERENCES anime(animeid) ON DELETE CASCADE,
     comment text,
     PRIMARY KEY (userid, animeid));
+
+    --
